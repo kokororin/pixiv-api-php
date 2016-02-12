@@ -2,7 +2,7 @@
 /**
  * pixiv-api-php
  * Pixiv API for PHP
- * 
+ *
  * @package  pixiv-api-php
  * @author   Kokororin
  * @license  MIT License
@@ -92,7 +92,7 @@ class PixivAPI
 
     public function ranking()
     {
-        return $this->fetch_from_url('/v1/ranking/all', array(
+        $result = $this->fetch_from_url('/v1/ranking/all', array(
             'image_sizes' => $this->params['image_sizes'],
             'include_stats' => 'true',
             'page' => $this->params['page'],
@@ -101,11 +101,13 @@ class PixivAPI
             'include_sanity_level' => 'true',
             'per_page' => $this->params['per_page'],
         ));
+        $this->init_params();
+        return $result;
     }
 
     public function search()
     {
-        return $this->fetch_from_url('/v1/search/works.json', array(
+        $result = $this->fetch_from_url('/v1/search/works.json', array(
             'image_sizes' => $this->params['image_sizes'],
             'period' => 'all',
             'include_stats' => 'true',
@@ -118,6 +120,8 @@ class PixivAPI
             'include_sanity_level' => 'true',
             'per_page' => $this->params['per_page'],
         ));
+        $this->init_params();
+        return $result;
     }
 
     protected function fetch_from_url($uri, $params = array())
