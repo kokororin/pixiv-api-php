@@ -464,7 +464,7 @@ class PixivAPI
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $include_stats = true, $include_sanity_level = true)
     {
-        return $this->fetch_from_url('/v1/search/works.json', array(
+        return $this->fetch_from_url('/v1/search/works.json', 'GET', array(
             'q' => $query,
             'page' => $page,
             'per_page' => $per_page,
