@@ -1,437 +1,104 @@
 pixiv-api-php
 ======
-_Pixiv API for PHP (with Non-Auth supported)_
+_Pixiv API for PHP (with Auth supported)_
 
-## /v1/ranking/all
+### Example:
 
-```php
-$api = new PixivAPI();
-echo $api->image_sizes('px_128x128,px_480mw,large')
-    ->mode('daily_r18') //Also 'daily'
-    ->per_page(10)
-    ->page(1)
-    ->profile_image_sizes('px_170x170,px_50x50')
-    ->ranking();
-```
+~~~php
+$api = PixivAPI();
+$api->login("username", "password");
 
-```json
-{
-    "status":"success",
-    "response":[
-        {
-            "content":"all",
-            "mode":"daily_r18",
-            "date":"2016-02-11",
-            "works":[
-                {
-                    "rank":1,
-                    "previous_rank":0,
-                    "work":{
-                        "id":55210354,
-                        "title":"松ログ①",
-                        "caption":null,
-                        "tags":[
-                            "R-18",
-                            "腐向け",
-                            "一カラ",
-                            "チョロカラ",
-                            "十カラ",
-                            "BL松",
-                            "じょし松さん",
-                            "おそカラ",
-                            "一カラ(小)",
-                            "BL松5000users入り"
-                        ],
-                        "tools":null,
-                        "image_urls":{
-                            "px_128x128":"http://i3.pixiv.net/c/128x128/img-master/img/2016/02/11/05/42/42/55210354_p0_square1200.jpg",
-                            "px_480mw":"http://i3.pixiv.net/c/480x960/img-master/img/2016/02/11/05/42/42/55210354_p0_master1200.jpg",
-                            "large":"http://i3.pixiv.net/img-original/img/2016/02/11/05/42/42/55210354_p0.jpg"
-                        },
-                        "width":550,
-                        "height":859,
-                        "stats":{
-                            "scored_count":1201,
-                            "score":11988,
-                            "views_count":46645,
-                            "favorited_count":{
-                                "public":null,
-                                "private":null
-                            },
-                            "commented_count":null
-                        },
-                        "publicity":0,
-                        "age_limit":"r18",
-                        "created_time":"2016-02-11 05:42:00",
-                        "reuploaded_time":"2016-02-11 05:42:42",
-                        "user":{
-                            "id":16037363,
-                            "account":"timohatimo",
-                            "name":"よつや",
-                            "is_following":null,
-                            "is_follower":null,
-                            "is_friend":null,
-                            "is_premium":null,
-                            "profile_image_urls":{
-                                "px_170x170":"http://i2.pixiv.net/img170/profile/timohatimo/10518047.jpg",
-                                "px_50x50":"http://i2.pixiv.net/img170/profile/timohatimo/10518047_s.jpg"
-                            },
-                            "stats":null,
-                            "profile":null
-                        },
-                        "is_manga":null,
-                        "is_liked":null,
-                        "favorite_id":null,
-                        "page_count":40,
-                        "book_style":"none",
-                        "type":"illustration",
-                        "metadata":null,
-                        "content_type":null,
-                        "sanity_level":"black"
-                    }
-                },
-                {
-                    "rank":2,
-                    "previous_rank":4,
-                    "work":{
-                        "id":55197571,
-                        "title":"松log4",
-                        "caption":null,
-                        "tags":[
-                            "R-18",
-                            "BL松",
-                            "おそカラ",
-                            "カラおそ",
-                            "カラ一",
-                            "一十四",
-                            "BL松1000users入り",
-                            "男性同性愛"
-                        ],
-                        "tools":null,
-                        "image_urls":{
-                            "px_128x128":"http://i4.pixiv.net/c/128x128/img-master/img/2016/02/10/15/33/03/55197571_p0_square1200.jpg",
-                            "px_480mw":"http://i4.pixiv.net/c/480x960/img-master/img/2016/02/10/15/33/03/55197571_p0_master1200.jpg",
-                            "large":"http://i4.pixiv.net/img-original/img/2016/02/10/15/33/03/55197571_p0.png"
-                        },
-                        "width":500,
-                        "height":500,
-                        "stats":{
-                            "scored_count":585,
-                            "score":5804,
-                            "views_count":60294,
-                            "favorited_count":{
-                                "public":null,
-                                "private":null
-                            },
-                            "commented_count":null
-                        },
-                        "publicity":0,
-                        "age_limit":"r18",
-                        "created_time":"2016-02-10 15:33:00",
-                        "reuploaded_time":"2016-02-10 15:33:03",
-                        "user":{
-                            "id":6095458,
-                            "account":"eikoku19",
-                            "name":"みなん",
-                            "is_following":null,
-                            "is_follower":null,
-                            "is_friend":null,
-                            "is_premium":null,
-                            "profile_image_urls":{
-                                "px_170x170":"http://i2.pixiv.net/img120/profile/eikoku19/10325951.jpg",
-                                "px_50x50":"http://i2.pixiv.net/img120/profile/eikoku19/10325951_s.jpg"
-                            },
-                            "stats":null,
-                            "profile":null
-                        },
-                        "is_manga":null,
-                        "is_liked":null,
-                        "favorite_id":null,
-                        "page_count":36,
-                        "book_style":"none",
-                        "type":"illustration",
-                        "metadata":null,
-                        "content_type":null,
-                        "sanity_level":"black"
-                    }
-                },
-                {
-                    "rank":3,
-                    "previous_rank":7,
-                    "work":{
-                        "id":55199586,
-                        "title":"松ろぐ２",
-                        "caption":null,
-                        "tags":[
-                            "R-18",
-                            "BL松",
-                            "一カラ",
-                            "BL松1000users入り"
-                        ],
-                        "tools":null,
-                        "image_urls":{
-                            "px_128x128":"http://i3.pixiv.net/c/128x128/img-master/img/2016/02/10/18/27/54/55199586_p0_square1200.jpg",
-                            "px_480mw":"http://i3.pixiv.net/c/480x960/img-master/img/2016/02/10/18/27/54/55199586_p0_master1200.jpg",
-                            "large":"http://i3.pixiv.net/img-original/img/2016/02/10/18/27/54/55199586_p0.png"
-                        },
-                        "width":741,
-                        "height":1037,
-                        "stats":{
-                            "scored_count":787,
-                            "score":7849,
-                            "views_count":56216,
-                            "favorited_count":{
-                                "public":null,
-                                "private":null
-                            },
-                            "commented_count":null
-                        },
-                        "publicity":0,
-                        "age_limit":"r18",
-                        "created_time":"2016-02-10 18:27:00",
-                        "reuploaded_time":"2016-02-10 18:27:54",
-                        "user":{
-                            "id":11223375,
-                            "account":"agt_q9",
-                            "name":"あがた",
-                            "is_following":null,
-                            "is_follower":null,
-                            "is_friend":null,
-                            "is_premium":null,
-                            "profile_image_urls":{
-                                "px_170x170":"http://i4.pixiv.net/img146/profile/agt_q9/10192944.png",
-                                "px_50x50":"http://i4.pixiv.net/img146/profile/agt_q9/10192944_s.png"
-                            },
-                            "stats":null,
-                            "profile":null
-                        },
-                        "is_manga":null,
-                        "is_liked":null,
-                        "favorite_id":null,
-                        "page_count":13,
-                        "book_style":"none",
-                        "type":"manga",
-                        "metadata":null,
-                        "content_type":null,
-                        "sanity_level":"black"
-                    }
-                }
-            ]
-        }
-    ],
-    "count":1,
-    "pagination":{
-        "previous":null,
-        "next":2,
-        "current":1,
-        "per_page":3,
-        "total":100,
-        "pages":34
-    }
-}
-```
+# get origin url
+$json_result = $api->works(45455208);
+$array = json_decode($json_result, true);
+$illust = $array['response'][0];
+printf("origin url: %s", $illust['image_urls']['large']);
+~~~
 
-## /v1/search/works.json
+## API functions
 
-```php
-$api = new PixivAPI();
-echo $api->image_sizes('px_128x128,px_480mw,large')
-    ->mode('exact_tag')
-    ->per_page(30)
-    ->page(1)
-    ->profile_image_sizes('px_170x170,px_50x50')
-    ->q('ラブライブ')
-    ->search();
-```
+### Public-API
 
-```json
-{
-    "status":"success",
-    "response":[
-        {
-            "id":55236420,
-            "title":"ことりちゃ",
-            "caption":null,
-            "tags":[
-                "ラブライブ",
-                "南ことり"
-            ],
-            "tools":[
+~~~python
+class PixivAPI()
 
-            ],
-            "image_urls":{
-                "px_128x128":"http://i1.pixiv.net/c/128x128/img-master/img/2016/02/12/19/28/37/55236420_p0_square1200.jpg",
-                "px_480mw":"http://i1.pixiv.net/c/480x960/img-master/img/2016/02/12/19/28/37/55236420_p0_master1200.jpg",
-                "large":"http://i1.pixiv.net/img-original/img/2016/02/12/19/28/37/55236420_p0.jpg"
-            },
-            "width":768,
-            "height":768,
-            "stats":{
-                "scored_count":3,
-                "score":30,
-                "views_count":27,
-                "favorited_count":{
-                    "public":1,
-                    "private":0
-                },
-                "commented_count":0
-            },
-            "publicity":0,
-            "age_limit":"all-age",
-            "created_time":"2016-02-12 19:28:37",
-            "reuploaded_time":"2016-02-12 19:28:37",
-            "user":{
-                "id":8161295,
-                "account":"eimi96nano",
-                "name":"藍坂えいみ",
-                "is_following":false,
-                "is_follower":false,
-                "is_friend":false,
-                "is_premium":null,
-                "profile_image_urls":{
-                    "px_50x50":"http://i2.pixiv.net/img130/profile/eimi96nano/8236765_s.jpg"
-                },
-                "stats":null,
-                "profile":null
-            },
-            "is_manga":false,
-            "is_liked":false,
-            "favorite_id":0,
-            "page_count":1,
-            "book_style":"none",
-            "type":"illustration",
-            "metadata":null,
-            "content_type":null,
-            "sanity_level":"white"
-        },
-        {
-            "id":55236103,
-            "title":"僕らのラブライブ！11 サークルカット (＋新刊サンプル1枚)",
-            "caption":"イベント、「僕らのラブライブ」に初参加することとなりました。 オンリーイベントも初参加なので色んな意味で楽しみです。 新刊「ウミスズメ」(男性成人向け本)頒布予定です、よろしく～ ちょいちょい情報小出ししていきます。 他予定 ●Comic1、当選したら新刊「アイドル堕ち本」R18オリジナル頒布予定。 ●夏コミ、当選したら新刊「東京ザナドゥ本」R18予定 リクなどなんかご希望ありましたらメッセージやメールでどうぞ ※このサークルカットにはR18的要素の画像はないので 一般向けで公開させていただきます。",
-            "tags":[
-                "ラブライブ",
-                "僕らのラブライブ",
-                "僕ラブ",
-                "僕ラブ11",
-                "僕らのラブライブ!11",
-                "園田海未",
-                "サークルカット",
-                "ラブライブ!"
-            ],
-            "tools":[
+    function bad_words()
 
-            ],
-            "image_urls":{
-                "px_128x128":"http://i4.pixiv.net/c/128x128/img-master/img/2016/02/12/19/06/09/55236103_p0_square1200.jpg",
-                "px_480mw":"http://i4.pixiv.net/c/480x960/img-master/img/2016/02/12/19/06/09/55236103_p0_master1200.jpg",
-                "large":"http://i4.pixiv.net/img-original/img/2016/02/12/19/06/09/55236103_p0.jpg"
-            },
-            "width":1654,
-            "height":1134,
-            "stats":{
-                "scored_count":0,
-                "score":0,
-                "views_count":56,
-                "favorited_count":{
-                    "public":0,
-                    "private":0
-                },
-                "commented_count":0
-            },
-            "publicity":0,
-            "age_limit":"all-age",
-            "created_time":"2016-02-12 19:06:09",
-            "reuploaded_time":"2016-02-12 19:06:09",
-            "user":{
-                "id":12779424,
-                "account":"amasuzume",
-                "name":"アマスズメ@C88新刊委託中",
-                "is_following":false,
-                "is_follower":false,
-                "is_friend":false,
-                "is_premium":null,
-                "profile_image_urls":{
-                    "px_50x50":"http://i3.pixiv.net/img153/profile/amasuzume/8603966_s.png"
-                },
-                "stats":null,
-                "profile":null
-            },
-            "is_manga":true,
-            "is_liked":false,
-            "favorite_id":0,
-            "page_count":2,
-            "book_style":"none",
-            "type":"illustration",
-            "metadata":null,
-            "content_type":null,
-            "sanity_level":"semi_black"
-        },
-        {
-            "id":55236096,
-            "title":"園田 海未",
-            "caption":null,
-            "tags":[
-                "園田海未",
-                "ラブライブ",
-                "スクフェス"
-            ],
-            "tools":[
+    # 作品详细
+    function works($illust_id)
 
-            ],
-            "image_urls":{
-                "px_128x128":"http://i1.pixiv.net/c/128x128/img-master/img/2016/02/12/19/05/49/55236096_p0_square1200.jpg",
-                "px_480mw":"http://i1.pixiv.net/c/480x960/img-master/img/2016/02/12/19/05/49/55236096_p0_master1200.jpg",
-                "large":"http://i1.pixiv.net/img-original/img/2016/02/12/19/05/49/55236096_p0.jpg"
-            },
-            "width":716,
-            "height":1024,
-            "stats":{
-                "scored_count":0,
-                "score":0,
-                "views_count":31,
-                "favorited_count":{
-                    "public":0,
-                    "private":0
-                },
-                "commented_count":0
-            },
-            "publicity":0,
-            "age_limit":"all-age",
-            "created_time":"2016-02-12 19:05:49",
-            "reuploaded_time":"2016-02-12 19:05:49",
-            "user":{
-                "id":17185546,
-                "account":"ikarashi0719",
-                "name":"からし",
-                "is_following":false,
-                "is_follower":false,
-                "is_friend":false,
-                "is_premium":null,
-                "profile_image_urls":{
-                    "px_50x50":"http://i1.pixiv.net/img175/profile/ikarashi0719/10515470_s.jpg"
-                },
-                "stats":null,
-                "profile":null
-            },
-            "is_manga":false,
-            "is_liked":false,
-            "favorite_id":0,
-            "page_count":1,
-            "book_style":"none",
-            "type":"illustration",
-            "metadata":null,
-            "content_type":null,
-            "sanity_level":"white"
-        }
-    ],
-    "count":3,
-    "pagination":{
-        "previous":null,
-        "next":2,
-        "current":1,
-        "per_page":3,
-        "total":31456,
-        "pages":66
-    }
-}
-```
+    # 用户资料
+    function users($author_id)
+
+    # 我的订阅
+    function me_feeds($show_r18 = true, $max_id = null)
+
+    # 获取收藏夹
+    function me_favorite_works($page = 1, $per_page = 50, $publicity = 'public',
+        $image_sizes = array('px_128x128', 'px_480mw', 'large'))
+
+    # 添加收藏
+    # publicity:  public, private
+    function me_favorite_works_add($work_id, $publicity = 'public')
+
+    # 删除收藏
+    function me_favorite_works_delete($ids, $publicity = 'public')
+
+    # 关注用户
+    # publicity:  public, private
+    function me_favorite_users_follow($user_id, $publicity = 'public')
+
+    # 用户作品
+    # publicity:  public, private
+    function users_works($author_id, $page = 1, $per_page = 30,
+        $image_sizes = array('px_128x128', 'px_480mw', 'large'),
+        $include_stats = true, $include_sanity_level = true)
+
+    # 用户收藏
+    # function users_favorite_works($author_id, $page = 1, $per_page = 30,
+        $image_sizes = array('px_128x128', 'px_480mw', 'large'),
+
+    # 排行榜/过去排行榜
+    # mode:
+    #   daily - 每日
+    #   weekly - 每周
+    #   monthly - 每月
+    #   male - 男性热门
+    #   female - 女性热门
+    #   original - 原创
+    #   rookie - Rookie
+    #   daily_r18 - R18每日
+    #   weekly_r18 - R18每周
+    #   male_r18
+    #   female_r18
+    #   r18g
+    # page: 1-n
+    # date: '2015-04-01' (仅过去排行榜)
+    function ranking($ranking_type = 'all', $mode = 'daily', $page = 1, $per_page = 50, $date = null,
+        $image_sizes = array('px_128x128', 'px_480mw', 'large'),
+        $profile_image_sizes = array('px_170x170', 'px_50x50'),
+        $include_stats = true, $include_sanity_level = true)
+
+    # 搜索
+    # query: 搜索的文字
+    # page: 1-n
+    # mode:
+    #   text - 标题/描述
+    #   tag - 非精确标签
+    #   exact_tag - 精确标签
+    #   caption - 描述
+    # period (only applies to asc order):  
+    #   all - 所有
+    #   day - 一天之内
+    #   week - 一周之内
+    #   month - 一月之内
+    # order:
+    #   desc - 新顺序
+    #   asc - 旧顺序
+    function search_works($query, $page = 1, $per_page = 30, $mode = 'text',
+        $period = 'all', $order = 'desc', $sort = 'date',
+        $types = array('illustration', 'manga', 'ugoira'),
+        $image_sizes = array('px_128x128', 'px_480mw', 'large'),
+        $include_stats = true, $include_sanity_level = true)
+
+~~~
