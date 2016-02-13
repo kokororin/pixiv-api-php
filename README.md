@@ -19,7 +19,7 @@ printf("origin url: %s", $illust['image_urls']['large']);
 
 ### Public-API
 
-~~~python
+~~~php
 class PixivAPI()
 
     function bad_words()
