@@ -15,38 +15,47 @@ class PixivAPI
      * @var string
      */
     protected $api_prefix = 'https://public-api.secure.pixiv.net';
+
     /**
      * @var string
      */
     protected $api_referer = 'http://spapi.pixiv.net/';
+
     /**
      * @var string
      */
     protected $api_useragent = 'User-Agent: PixivIOSApp/5.8.3';
+
     /**
      * @var string
      */
     protected $api_host = 'Host: public-api.secure.pixiv.net';
+
     /**
      * @var string
      */
     protected $api_authorization = 'Authorization: Bearer WHDWCGnwWA2C8PRfQSdXJxjXp0G6ULRaRkkd6t5B6h8';
+
     /**
      * @var string
      */
     protected $oauth_client_id = 'bYGKuGVw91e0NMfPGp44euvGt59s';
+
     /**
      * @var string
      */
     protected $oauth_client_secret = 'HP3RmkgAmEGro0gn1x9ioawQE8WMfvLXDz3ZqxpK';
+
     /**
      * @var string
      */
     protected $oauth_url = 'https://oauth.secure.pixiv.net/auth/token';
+
     /**
      * @var string
      */
     protected $oauth_referer = 'http://www.pixiv.net/';
+
     /**
      * @var string
      */
@@ -545,7 +554,12 @@ class PixivAPI
         curl_setopt($ch, CURLOPT_REFERER, $this->api_referer);
         $result = curl_exec($ch);
         curl_close($ch);
-        return $result;
+        $array = json_decode($result, true);
+        if ($array['status'] == 'failure')
+        {
+            throw new Exception('Error occured : ' . $array['errors']['system']['message']);
+        }
+        return $array;
     }
 
 }
