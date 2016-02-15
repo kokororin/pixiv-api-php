@@ -155,7 +155,7 @@ class PixivAPI
         $params = array(
             'relation' => 'all',
             'type' => 'touch_nottext',
-            'show_r18' => $show_r18 ? 1 : 0,
+            'show_r18' => $show_r18,
         );
         if (!is_null($max_id))
         {
@@ -347,7 +347,7 @@ class PixivAPI
         $params = array(
             'relation' => 'all',
             'type' => 'touch_nottext',
-            'show_r18' => $show_r18 ? 1 : 0,
+            'show_r18' => $show_r18,
         );
         if (!is_null($max_id))
         {
@@ -529,6 +529,13 @@ class PixivAPI
             throw new Exception('HTTP Method is not allowed.');
         }
         $url = $this->api_prefix . $uri;
+        foreach ($params as $key => $value)
+        {
+            if (is_bool($value))
+            {
+                $params[$key] = ($value) ? 'true' : 'false';
+            }
+        }
         if ($method == 'GET')
         {
             $url .= '?' . http_build_query($params);
