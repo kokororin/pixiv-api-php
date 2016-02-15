@@ -181,7 +181,7 @@ print_r($result);
 $result = $api.ranking('illust', 'weekly', 1);
 print_r($result);
 $illust = $result['response'][0]['works'][0]['work'];
-print_r(">>> %s origin url: %u" ,$illust['title'], $illust['image_urls']['large']);
+printf(">>> %s origin url: %u" ,$illust['title'], $illust['image_urls']['large']);
 
 # 过去排行榜 PAPI.ranking(all, 2015-05-01)
 $result = $api->ranking('all', 'daily', 1, '2015-05-01');
