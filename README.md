@@ -2,6 +2,12 @@ pixiv-api-php
 ======
 _Pixiv API for PHP (with Auth supported)_
 
+### Installation
+
+~~~bash
+composer require kokororin/pixiv-api-php
+~~~
+
 ### Example:
 
 ~~~php
