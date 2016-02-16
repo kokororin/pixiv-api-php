@@ -1,0 +1,24 @@
+{
+    "name": "kokororin/pixiv-api-php",
+    "description": "Pixiv API for PHP (with Auth supported) ",
+    "type": "library",
+    "keywords": [
+        "Pixiv",
+        "PHP",
+        "API"
+    ],
+    "homepage": "https://github.com/kokororin/pixiv-api-php",
+    "license": "MIT License",
+    "authors": [
+        {
+            "name": "Sora",
+            "homepage": "https://github.com/kokororin/pixiv-api-php"
+        }
+    ],
+    "autoload": {
+        "files": ["pixiv.php"]
+    },
+    "require:": {
+        "php": ">=5.2"
+    }
+}
