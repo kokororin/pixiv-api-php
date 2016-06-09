@@ -133,7 +133,7 @@ class PixivAPI
      */
     public function users($author_id)
     {
-        return $this->fetch_from_url('v1/users/' . $author_id . '.json', 'GET', array(
+        return $this->fetch_from_url('/v1/users/' . $author_id . '.json', 'GET', array(
             'profile_image_sizes' => 'px_170x170,px_50x50',
             'image_sizes' => 'px_128x128,small,medium,large,px_480mw',
             'include_stats' => 1,
