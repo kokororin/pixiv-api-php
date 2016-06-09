@@ -11,7 +11,7 @@ composer require kokororin/pixiv-api-php
 ### Example:
 
 ~~~php
-$api = PixivAPI();
+$api = new PixivAPI;
 $api->login("username", "password");
 
 # get origin url
