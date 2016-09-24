@@ -6,7 +6,7 @@
  * @package  pixiv-api-php
  * @author   Kokororin
  * @license  MIT License
- * @version  1.0.0
+ * @version  1.2
  * @link     https://github.com/kokororin/pixiv-api-php
  */
 class PixivAPI
@@ -63,10 +63,19 @@ class PixivAPI
 
     public function __construct()
     {
-        if (!in_array('curl', get_loaded_extensions()))
-        {
+        if (!in_array('curl', get_loaded_extensions())) {
             throw new Exception('You need to install cURL, see: http://curl.haxx.se/docs/install.html');
         }
+    }
+
+    public function setAccessToken($access_token)
+    {
+        $this->access_token = $access_token;
+    }
+
+    public function setApiAuthorization($api_authorization)
+    {
+        $this->$api_authorization = $api_authorization;
     }
 
     /**
@@ -96,8 +105,7 @@ class PixivAPI
         $result = curl_exec($ch);
         curl_close($ch);
         $object = json_decode($result);
-        if (isset($object->has_error))
-        {
+        if (isset($object->has_error)) {
             throw new Exception('Login error: ' . $object->errors->system->message);
         }
         $this->access_token = $object->response->access_token;
@@ -157,8 +165,7 @@ class PixivAPI
             'type' => 'touch_nottext',
             'show_r18' => $show_r18,
         );
-        if (!is_null($max_id))
-        {
+        if (!is_null($max_id)) {
             $params['max_id'] = $max_id;
         }
         return $this->fetch_from_url('/v1/me/feeds.json', 'GET', $params);
@@ -175,8 +182,7 @@ class PixivAPI
      * @return mixed
      */
     public function me_favorite_works($page = 1, $per_page = 50, $publicity = 'public',
-        $image_sizes = array('px_128x128', 'px_480mw', 'large'))
-    {
+        $image_sizes = array('px_128x128', 'px_480mw', 'large')) {
         return $this->fetch_from_url('/v1/me/favorite_works.json', 'GET', array(
             'page' => $page,
             'per_page' => $per_page,
@@ -229,8 +235,7 @@ class PixivAPI
      */
     public function me_following_works($page = 1, $per_page = 30,
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
-        $include_stats = true, $include_sanity_level = true)
-    {
+        $include_stats = true, $include_sanity_level = true) {
         return $this->fetch_from_url('/v1/me/following/works.json', 'GET', array(
             'page' => $page,
             'per_page' => $per_page,
@@ -301,8 +306,7 @@ class PixivAPI
      */
     public function users_works($author_id, $page = 1, $per_page = 30,
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
-        $include_stats = true, $include_sanity_level = true)
-    {
+        $include_stats = true, $include_sanity_level = true) {
         return $this->fetch_from_url('/v1/users/' . $author_id . '/works.json', 'GET', array(
             'page' => $page,
             'per_page' => $per_page,
@@ -324,8 +328,7 @@ class PixivAPI
      */
     public function users_favorite_works($author_id, $page = 1, $per_page = 30,
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
-        $include_sanity_level = true)
-    {
+        $include_sanity_level = true) {
         return $this->fetch_from_url('/v1/users/' . $author_id . '/favorite_works.json', 'GET', array(
             'page' => $page,
             'per_page' => $per_page,
@@ -349,8 +352,7 @@ class PixivAPI
             'type' => 'touch_nottext',
             'show_r18' => $show_r18,
         );
-        if (!is_null($max_id))
-        {
+        if (!is_null($max_id)) {
             $params['max_id'] = $max_id;
         }
         return $this->fetch_from_url('/v1/users/' . $author_id . '/feeds.json', 'GET', $params);
@@ -395,8 +397,7 @@ class PixivAPI
     public function ranking($ranking_type = 'all', $mode = 'daily', $page = 1, $per_page = 50, $date = null,
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $profile_image_sizes = array('px_170x170', 'px_50x50'),
-        $include_stats = true, $include_sanity_level = true)
-    {
+        $include_stats = true, $include_sanity_level = true) {
         $params = array(
             'mode' => $mode,
             'page' => $page,
@@ -406,8 +407,7 @@ class PixivAPI
             'image_sizes' => implode(',', $image_sizes),
             'profile_image_sizes' => implode(',', $profile_image_sizes),
         );
-        if (!is_null($date))
-        {
+        if (!is_null($date)) {
             $params['date'] = $date;
         }
         return $this->fetch_from_url('/v1/ranking/' . $ranking_type . '.json', 'GET', $params);
@@ -429,8 +429,7 @@ class PixivAPI
     public function ranking_all($mode = 'daily', $page = 1, $per_page = 50, $date = null,
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $profile_image_sizes = array('px_170x170', 'px_50x50'),
-        $include_stats = true, $include_sanity_level = true)
-    {
+        $include_stats = true, $include_sanity_level = true) {
         return $this->ranking('all', $mode, $page, $per_page, $date,
             $image_sizes, $profile_image_sizes,
             $include_stats, $include_sanity_level);
@@ -471,8 +470,7 @@ class PixivAPI
         $period = 'all', $order = 'desc', $sort = 'date',
         $types = array('illustration', 'manga', 'ugoira'),
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
-        $include_stats = true, $include_sanity_level = true)
-    {
+        $include_stats = true, $include_sanity_level = true) {
         return $this->fetch_from_url('/v1/search/works.json', 'GET', array(
             'q' => $query,
             'page' => $page,
@@ -502,8 +500,7 @@ class PixivAPI
     public function latest_works($page = 1, $per_page = 30,
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $profile_image_sizes = array('px_170x170', 'px_50x50'),
-        $include_stats = true, $include_sanity_level = true)
-    {
+        $include_stats = true, $include_sanity_level = true) {
         return $this->fetch_from_url('/v1/works.json', 'GET', array(
             'page' => $page,
             'per_page' => $per_page,
@@ -524,20 +521,16 @@ class PixivAPI
     protected function fetch_from_url($uri, $method, $params = array())
     {
         $method = strtoupper($method);
-        if (!in_array($method, array('POST', 'GET', 'PUT', 'DELETE')))
-        {
+        if (!in_array($method, array('POST', 'GET', 'PUT', 'DELETE'))) {
             throw new Exception('HTTP Method is not allowed.');
         }
         $url = $this->api_prefix . $uri;
-        foreach ($params as $key => $value)
-        {
-            if (is_bool($value))
-            {
+        foreach ($params as $key => $value) {
+            if (is_bool($value)) {
                 $params[$key] = ($value) ? 'true' : 'false';
             }
         }
-        if ($method == 'GET')
-        {
+        if ($method == 'GET') {
             $url .= '?' . http_build_query($params);
         }
         $ch = curl_init();
@@ -549,12 +542,10 @@ class PixivAPI
             $this->api_authorization,
             $this->api_useragent,
         ));
-        if ($method == 'POST')
-        {
+        if ($method == 'POST') {
             curl_setopt($ch, CURLOPT_POST, 1);
         }
-        if ($method == 'POST' || $method == 'DELETE' || $method == 'PUT')
-        {
+        if ($method == 'POST' || $method == 'DELETE' || $method == 'PUT') {
 
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
         }
@@ -562,10 +553,7 @@ class PixivAPI
         $result = curl_exec($ch);
         curl_close($ch);
         $array = json_decode($result, true);
-        if ($array['status'] == 'failure')
-        {
-            throw new Exception('Error occured : ' . $array['errors']['system']['message']);
-        }
+
         return $array;
     }
 
