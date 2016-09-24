@@ -6,7 +6,7 @@
  * @package  pixiv-api-php
  * @author   Kokororin
  * @license  MIT License
- * @version  1.2
+ * @version  1.3
  * @link     https://github.com/kokororin/pixiv-api-php
  */
 class PixivAPI
@@ -68,9 +68,19 @@ class PixivAPI
         }
     }
 
+    public function getAccessToken()
+    {
+        return $this->access_token;
+    }
+
     public function setAccessToken($access_token)
     {
         $this->access_token = $access_token;
+    }
+
+    public function getApiAuthorization()
+    {
+        return $this->api_authorization;
     }
 
     public function setApiAuthorization($api_authorization)
@@ -108,8 +118,8 @@ class PixivAPI
         if (isset($object->has_error)) {
             throw new Exception('Login error: ' . $object->errors->system->message);
         }
-        $this->access_token = $object->response->access_token;
-        $this->api_authorization = 'Authorization: Bearer ' . $this->access_token;
+        $this->setAccessToken($object->response->access_token);
+        $this->setApiAuthorization('Authorization: Bearer ' . $this->access_token);
     }
 
     /**
