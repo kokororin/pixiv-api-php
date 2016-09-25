@@ -6,7 +6,7 @@
  * @package  pixiv-api-php
  * @author   Kokororin
  * @license  MIT License
- * @version  1.5
+ * @version  1.6
  * @link     https://github.com/kokororin/pixiv-api-php
  */
 class PixivAPI
@@ -57,9 +57,14 @@ class PixivAPI
     protected $oauth_referer = 'http://www.pixiv.net/';
 
     /**
-     * @var string
+     * @var null
      */
-    protected $access_token = '';
+    protected $access_token = null;
+
+    /**
+     * @var null
+     */
+    protected $refresh_token = null;
 
     /**
      * @var null
@@ -73,31 +78,61 @@ class PixivAPI
         }
     }
 
+    /**
+     * 获取Access Token
+     *
+     * @return string
+     */
     public function getAccessToken()
     {
         return $this->access_token;
     }
 
+    /**
+     * 设置Access Token
+     *
+     * @param $access_token
+     */
     public function setAccessToken($access_token)
     {
         $this->access_token = $access_token;
     }
 
-    public function getApiAuthorization()
+    /**
+     * 获取Refresh Token
+     *
+     * @return string
+     */
+    public function getRefreshToken()
     {
-        return $this->api_authorization;
+        return $this->refresh_token;
     }
 
-    public function setApiAuthorization($api_authorization)
+    /**
+     * 设置Refresh Token
+     *
+     * @param $refresh_token
+     */
+    public function setRefreshToken($refresh_token)
     {
-        $this->$api_authorization = $api_authorization;
+        $this->refresh_token = $this->refresh_token;
     }
 
+    /**
+     * 获取认证后的信息
+     *
+     * @return string
+     */
     public function getAuthorizationResponse()
     {
         return $this->authorization_response;
     }
 
+    /**
+     * 设置认证后的信息
+     *
+     * @param $authorization_response
+     */
     public function setAuthorizationResponse($authorization_response)
     {
         $this->authorization_response = $authorization_response;
@@ -108,8 +143,9 @@ class PixivAPI
      *
      * @param $user
      * @param $pwd
+     * @param $refresh_token
      */
-    public function login($user, $pwd)
+    public function login($user = null, $pwd = null, $refresh_token = null)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->oauth_url);
@@ -119,23 +155,36 @@ class PixivAPI
             $this->api_authorization,
         ));
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array(
-            'username' => $user,
-            'password' => $pwd,
-            'grant_type' => 'password',
+        $request = array(
             'client_id' => $this->oauth_client_id,
             'client_secret' => $this->oauth_client_secret,
-        )));
+        );
+        if ($user != null && $pwd != null) {
+            $request = array_merge($request, array(
+                'username' => $user,
+                'password' => $pwd,
+                'grant_type' => 'password',
+            ));
+        } elseif ($refresh_token != null || $this->refresh_token != null) {
+            $request = array_merge($request, array(
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $refresh_token || $this->refresh_token,
+            ));
+        } else {
+            throw new Exception('login params error.');
+        }
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($request));
         curl_setopt($ch, CURLOPT_REFERER, $this->oauth_referer);
         $result = curl_exec($ch);
         curl_close($ch);
         $object = json_decode($result);
-        $this->setAuthorizationResponse($object);
         if (isset($object->has_error)) {
             throw new Exception('Login error: ' . $object->errors->system->message);
         }
+        $this->setAuthorizationResponse($object->response);
         $this->setAccessToken($object->response->access_token);
-        $this->setApiAuthorization('Authorization: Bearer ' . $this->access_token);
+        $this->setRefreshToken($object->response->refresh_token);
+        $this->api_authorization = 'Authorization: Bearer ' . $this->access_token;
     }
 
     /**
