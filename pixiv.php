@@ -6,7 +6,7 @@
  * @package  pixiv-api-php
  * @author   Kokororin
  * @license  MIT License
- * @version  1.6
+ * @version  1.7
  * @link     https://github.com/kokororin/pixiv-api-php
  */
 class PixivAPI
@@ -96,6 +96,7 @@ class PixivAPI
     public function setAccessToken($access_token)
     {
         $this->access_token = $access_token;
+        $this->api_authorization = 'Authorization: Bearer ' . $access_token;
     }
 
     /**
@@ -184,7 +185,6 @@ class PixivAPI
         $this->setAuthorizationResponse($object->response);
         $this->setAccessToken($object->response->access_token);
         $this->setRefreshToken($object->response->refresh_token);
-        $this->api_authorization = 'Authorization: Bearer ' . $this->access_token;
     }
 
     /**
