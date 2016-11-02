@@ -1,5 +1,7 @@
-pixiv-api-php
-======
+# pixiv-api-php
+
+[![Build Status](https://api.travis-ci.org/kokororin/pixiv-api-php.svg)](https://travis-ci.org/kokororin/pixiv-api-php) [![Packagist](https://img.shields.io/packagist/dt/kokororin/pixiv-api-php.svg?maxAge=2592000)](https://packagist.org/packages/kokororin/pixiv-api-php)
+
 _Pixiv API for PHP (with Auth supported)_
 
 ### Installation
@@ -20,6 +22,14 @@ $array = json_decode($json_result, true);
 $illust = $array['response'][0];
 printf("origin url: %s", $illust['image_urls']['small']);
 ~~~
+
+## Tests
+
+To execute the test suite, you'll need phpunit.
+
+```bash
+$ composer test
+```
 
 ## API functions
 
@@ -134,7 +144,7 @@ print_r($user['profile']['introduction']);
 $result = $api->me_feeds(true);
 print_r($result);
 $ref_work = $result['response'][0]['ref_work'];
-print_r(['ref_work']['title']);
+print_r($ref_work['ref_work']['title']);
 
 # 我的收藏列表(private) PAPI.me_favorite_works
 $result = $api->me_favorite_works('private');
@@ -184,7 +194,7 @@ $result = $api->me_favorite_users_follow(1184799);
 print_r($result);
 
 # 排行榜 PAPI.ranking(illust)
-$result = $api.ranking('illust', 'weekly', 1);
+$result = $api->ranking('illust', 'weekly', 1);
 print_r($result);
 $illust = $result['response'][0]['works'][0]['work'];
 printf(">>> %s origin url: %u" ,$illust['title'], $illust['image_urls']['large']);
