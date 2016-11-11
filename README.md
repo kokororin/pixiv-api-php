@@ -13,6 +13,8 @@ composer require kokororin/pixiv-api-php
 ### Example:
 
 ~~~php
+require './vendor/autoload.php';
+
 $api = new PixivAPI;
 $api->login("username", "password");
 
@@ -21,6 +23,10 @@ $json_result = $api->works(45455208);
 $array = json_decode($json_result, true);
 $illust = $array['response'][0];
 printf("origin url: %s", $illust['image_urls']['small']);
+
+# App API
+$api = new PixivAppAPI;
+$api->login("username", "password");
 ~~~
 
 ## Tests
@@ -122,7 +128,7 @@ $ composer test
 
 ~~~php
 <?php
-require dirname(__FILE__) . '/pixiv.php';
+require './vendor/autoload.php';
 
 $api = new PixivAPI();
 

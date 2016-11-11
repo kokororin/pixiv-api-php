@@ -50,7 +50,7 @@ class PixivAPITest extends \PHPUnit_Framework_TestCase
 
     public function testMeFeeds()
     {
-       $api = $this->getLoginedInstance();
+        $api = $this->getLoginedInstance();
         $result = $api->me_feeds(true);
         $ref_work = $result['response'][0]['ref_work'];
 
@@ -61,7 +61,7 @@ class PixivAPITest extends \PHPUnit_Framework_TestCase
 
     public function testMeFavoriteWorks()
     {
-       $api = $this->getLoginedInstance();
+        $api = $this->getLoginedInstance();
         $result = $api->me_favorite_works('private');
         $illust = $result['response'][0]['work'];
 
@@ -74,7 +74,7 @@ class PixivAPITest extends \PHPUnit_Framework_TestCase
 
     public function testMeFollowingWorks()
     {
-      $api = $this->getLoginedInstance();
+        $api = $this->getLoginedInstance();
         $result = $api->me_following_works();
         $illust = $result['response'][0];
 

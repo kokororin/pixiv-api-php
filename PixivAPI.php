@@ -6,10 +6,12 @@
  * @package  pixiv-api-php
  * @author   Kokororin
  * @license  MIT License
- * @version  1.7
+ * @version  2.0
  * @link     https://github.com/kokororin/pixiv-api-php
  */
-class PixivAPI
+use \Curl\Curl;
+
+class PixivAPI extends PixivBase
 {
     /**
      * @var string
@@ -17,175 +19,13 @@ class PixivAPI
     protected $api_prefix = 'https://public-api.secure.pixiv.net';
 
     /**
-     * @var string
+     * @var array
      */
-    protected $api_referer = 'http://spapi.pixiv.net/';
-
-    /**
-     * @var string
-     */
-    protected $api_useragent = 'User-Agent: PixivIOSApp/5.8.3';
-
-    /**
-     * @var string
-     */
-    protected $api_host = 'Host: public-api.secure.pixiv.net';
-
-    /**
-     * @var string
-     */
-    protected $api_authorization = 'Authorization: Bearer WHDWCGnwWA2C8PRfQSdXJxjXp0G6ULRaRkkd6t5B6h8';
-
-    /**
-     * @var string
-     */
-    protected $oauth_client_id = 'bYGKuGVw91e0NMfPGp44euvGt59s';
-
-    /**
-     * @var string
-     */
-    protected $oauth_client_secret = 'HP3RmkgAmEGro0gn1x9ioawQE8WMfvLXDz3ZqxpK';
-
-    /**
-     * @var string
-     */
-    protected $oauth_url = 'https://oauth.secure.pixiv.net/auth/token';
-
-    /**
-     * @var string
-     */
-    protected $oauth_referer = 'http://www.pixiv.net/';
-
-    /**
-     * @var null
-     */
-    protected $access_token = null;
-
-    /**
-     * @var null
-     */
-    protected $refresh_token = null;
-
-    /**
-     * @var null
-     */
-    protected $authorization_response = null;
-
-    public function __construct()
-    {
-        if (!in_array('curl', get_loaded_extensions())) {
-            throw new Exception('You need to install cURL, see: http://curl.haxx.se/docs/install.html');
-        }
-    }
-
-    /**
-     * 获取Access Token
-     *
-     * @return string
-     */
-    public function getAccessToken()
-    {
-        return $this->access_token;
-    }
-
-    /**
-     * 设置Access Token
-     *
-     * @param $access_token
-     */
-    public function setAccessToken($access_token)
-    {
-        $this->access_token = $access_token;
-        $this->api_authorization = 'Authorization: Bearer ' . $access_token;
-    }
-
-    /**
-     * 获取Refresh Token
-     *
-     * @return string
-     */
-    public function getRefreshToken()
-    {
-        return $this->refresh_token;
-    }
-
-    /**
-     * 设置Refresh Token
-     *
-     * @param $refresh_token
-     */
-    public function setRefreshToken($refresh_token)
-    {
-        $this->refresh_token = $this->refresh_token;
-    }
-
-    /**
-     * 获取认证后的信息
-     *
-     * @return string
-     */
-    public function getAuthorizationResponse()
-    {
-        return $this->authorization_response;
-    }
-
-    /**
-     * 设置认证后的信息
-     *
-     * @param $authorization_response
-     */
-    public function setAuthorizationResponse($authorization_response)
-    {
-        $this->authorization_response = $authorization_response;
-    }
-
-    /**
-     * 登录
-     *
-     * @param $user
-     * @param $pwd
-     * @param $refresh_token
-     */
-    public function login($user = null, $pwd = null, $refresh_token = null)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->oauth_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            $this->api_authorization,
-        ));
-        curl_setopt($ch, CURLOPT_POST, 1);
-        $request = array(
-            'client_id' => $this->oauth_client_id,
-            'client_secret' => $this->oauth_client_secret,
-        );
-        if ($user != null && $pwd != null) {
-            $request = array_merge($request, array(
-                'username' => $user,
-                'password' => $pwd,
-                'grant_type' => 'password',
-            ));
-        } elseif ($refresh_token != null || $this->refresh_token != null) {
-            $request = array_merge($request, array(
-                'grant_type' => 'refresh_token',
-                'refresh_token' => $refresh_token || $this->refresh_token,
-            ));
-        } else {
-            throw new Exception('login params error.');
-        }
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($request));
-        curl_setopt($ch, CURLOPT_REFERER, $this->oauth_referer);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        $object = json_decode($result);
-        if (isset($object->has_error)) {
-            throw new Exception('Login error: ' . $object->errors->system->message);
-        }
-        $this->setAuthorizationResponse($object->response);
-        $this->setAccessToken($object->response->access_token);
-        $this->setRefreshToken($object->response->refresh_token);
-    }
+    protected $headers = array(
+        'Host' => 'public-api.secure.pixiv.net',
+        'Authorization' => 'Bearer WHDWCGnwWA2C8PRfQSdXJxjXp0G6ULRaRkkd6t5B6h8',
+        'User-Agent' => 'PixivIOSApp/5.8.3',
+    );
 
     /**
      * 黑词
@@ -595,8 +435,8 @@ class PixivAPI
      */
     protected function fetch_from_url($uri, $method, $params = array())
     {
-        $method = strtoupper($method);
-        if (!in_array($method, array('POST', 'GET', 'PUT', 'DELETE'))) {
+        $method = strtolower($method);
+        if (!in_array($method, array('post', 'get', 'put', 'delete'))) {
             throw new Exception('HTTP Method is not allowed.');
         }
         $url = $this->api_prefix . $uri;
@@ -605,29 +445,16 @@ class PixivAPI
                 $params[$key] = ($value) ? 'true' : 'false';
             }
         }
-        if ($method == 'GET') {
-            $url .= '?' . http_build_query($params);
-        }
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            $this->api_host,
-            $this->api_authorization,
-            $this->api_useragent,
-        ));
-        if ($method == 'POST') {
-            curl_setopt($ch, CURLOPT_POST, 1);
-        }
-        if ($method == 'POST' || $method == 'DELETE' || $method == 'PUT') {
+        $curl = new Curl();
+        $curl->setOpt(CURLOPT_CONNECTTIMEOUT, 10);
+        $curl->setHeader('Host', $this->headers['Host']);
+        $curl->setHeader('Authorization', $this->headers['Authorization']);
+        $curl->setHeader('User-Agent', $this->headers['User-Agent']);
+        $curl->$method($url, $params);
 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
-        }
-        curl_setopt($ch, CURLOPT_REFERER, $this->api_referer);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        $array = json_decode($result, true);
+        $result = $curl->response;
+        $curl->close();
+        $array = json_decode(json_encode($result), true);
 
         return $array;
     }
