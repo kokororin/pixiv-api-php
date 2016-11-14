@@ -43,9 +43,11 @@ class PixivAPI extends PixivBase
      * @param $illust_id
      * @return mixed
      */
-    public function works($illust_id)
+    public function works($illust_id, $image_sizes = array('px_128x128', 'px_480mw', 'large'))
     {
-        return $this->fetch_from_url('/v1/works/' . $illust_id . '.json', 'GET');
+        return $this->fetch_from_url('/v1/works/' . $illust_id . '.json', 'GET', array(
+            'image_sizes' => implode(',', $image_sizes),
+        ));
     }
 
     /**

@@ -9,7 +9,7 @@
  * @version  2.0
  * @link     https://github.com/kokororin/pixiv-api-php
  */
-use Curl\Curl;
+use \Curl\Curl;
 
 class PixivAppAPI extends PixivBase
 {
