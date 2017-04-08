@@ -36,4 +36,4 @@ See [PixivAppAPI.php](https://github.com/kokororin/pixiv-api-php/blob/master/Pix
 
 ### PixivAPI (**deprecated**)
 **Some method need authentication.**  
-See [PixivAPI.php](https://github.com/kokororin/pixiv-api-php/blob/master/PixivAPI.php) or [PixivAPITest.php](https://github.com/kokororin/pixiv-api-php/blob/master/tests/PixivAppTest.php) for detail usage.
+See [PixivAPI.php](https://github.com/kokororin/pixiv-api-php/blob/master/PixivAPI.php) or [PixivAPITest.php](https://github.com/kokororin/pixiv-api-php/blob/master/tests/PixivAPITest.php) for detail usage.
