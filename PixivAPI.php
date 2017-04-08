@@ -6,10 +6,9 @@
  * @package  pixiv-api-php
  * @author   Kokororin
  * @license  MIT License
- * @version  2.0
+ * @version  2.1
  * @link     https://github.com/kokororin/pixiv-api-php
  */
-use \Curl\Curl;
 
 class PixivAPI extends PixivBase
 {
@@ -34,7 +33,10 @@ class PixivAPI extends PixivBase
      */
     public function bad_words()
     {
-        return $this->fetch_from_url('/v1.1/bad_words.json', 'GET');
+        return $this->fetch('/v1.1/bad_words.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+        ));
     }
 
     /**
@@ -45,8 +47,12 @@ class PixivAPI extends PixivBase
      */
     public function works($illust_id, $image_sizes = array('px_128x128', 'px_480mw', 'large'))
     {
-        return $this->fetch_from_url('/v1/works/' . $illust_id . '.json', 'GET', array(
-            'image_sizes' => implode(',', $image_sizes),
+        return $this->fetch('/v1/works/' . $illust_id . '.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'image_sizes' => implode(',', $image_sizes),
+            ),
         ));
     }
 
@@ -58,13 +64,17 @@ class PixivAPI extends PixivBase
      */
     public function users($author_id)
     {
-        return $this->fetch_from_url('/v1/users/' . $author_id . '.json', 'GET', array(
-            'profile_image_sizes' => 'px_170x170,px_50x50',
-            'image_sizes' => 'px_128x128,small,medium,large,px_480mw',
-            'include_stats' => 1,
-            'include_profile' => 1,
-            'include_workspace' => 1,
-            'include_contacts' => 1,
+        return $this->fetch('/v1/users/' . $author_id . '.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'profile_image_sizes' => 'px_170x170,px_50x50',
+                'image_sizes' => 'px_128x128,small,medium,large,px_480mw',
+                'include_stats' => 1,
+                'include_profile' => 1,
+                'include_workspace' => 1,
+                'include_contacts' => 1,
+            ),
         ));
     }
 
@@ -77,15 +87,19 @@ class PixivAPI extends PixivBase
      */
     public function me_feeds($show_r18 = true, $max_id = null)
     {
-        $params = array(
+        $body = array(
             'relation' => 'all',
             'type' => 'touch_nottext',
             'show_r18' => $show_r18,
         );
         if (!is_null($max_id)) {
-            $params['max_id'] = $max_id;
+            $body['max_id'] = $max_id;
         }
-        return $this->fetch_from_url('/v1/me/feeds.json', 'GET', $params);
+        return $this->fetch('/v1/me/feeds.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => $body,
+        ));
     }
 
     /**
@@ -100,11 +114,15 @@ class PixivAPI extends PixivBase
      */
     public function me_favorite_works($page = 1, $per_page = 50, $publicity = 'public',
         $image_sizes = array('px_128x128', 'px_480mw', 'large')) {
-        return $this->fetch_from_url('/v1/me/favorite_works.json', 'GET', array(
-            'page' => $page,
-            'per_page' => $per_page,
-            'publicity' => $publicity,
-            'image_sizes' => implode(',', $image_sizes),
+        return $this->fetch('/v1/me/favorite_works.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'page' => $page,
+                'per_page' => $per_page,
+                'publicity' => $publicity,
+                'image_sizes' => implode(',', $image_sizes),
+            ),
         ));
     }
 
@@ -118,9 +136,13 @@ class PixivAPI extends PixivBase
      */
     public function me_favorite_works_add($work_id, $publicity = 'public')
     {
-        return $this->fetch_from_url('/v1/me/favorite_works.json', 'POST', array(
-            'work_id' => $work_id,
-            'publicity' => $publicity,
+        return $this->fetch('/v1/me/favorite_works.json', array(
+            'method' => 'post',
+            'headers' => $this->headers,
+            'body' => array(
+                'work_id' => $work_id,
+                'publicity' => $publicity,
+            ),
         ));
     }
 
@@ -134,9 +156,13 @@ class PixivAPI extends PixivBase
      */
     public function me_favorite_works_delete($ids, $publicity = 'public')
     {
-        return $this->fetch_from_url('/v1/me/favorite_works.json', 'DELETE', array(
-            'ids' => implode(',', $ids),
-            'publicity' => $publicity,
+        return $this->fetch('/v1/me/favorite_works.json', array(
+            'method' => 'delete',
+            'headers' => $this->headers,
+            'body' => array(
+                'ids' => implode(',', $ids),
+                'publicity' => $publicity,
+            ),
         ));
     }
 
@@ -153,12 +179,16 @@ class PixivAPI extends PixivBase
     public function me_following_works($page = 1, $per_page = 30,
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $include_stats = true, $include_sanity_level = true) {
-        return $this->fetch_from_url('/v1/me/following/works.json', 'GET', array(
-            'page' => $page,
-            'per_page' => $per_page,
-            'image_sizes' => implode(',', $image_sizes),
-            'include_stats' > $include_stats,
-            'include_sanity_level' => $include_sanity_level,
+        return $this->fetch('/v1/me/following/works.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'page' => $page,
+                'per_page' => $per_page,
+                'image_sizes' => implode(',', $image_sizes),
+                'include_stats' > $include_stats,
+                'include_sanity_level' => $include_sanity_level,
+            ),
         ));
     }
 
@@ -172,10 +202,14 @@ class PixivAPI extends PixivBase
      */
     public function me_following($page = 1, $per_page = 30, $publicity = 'public')
     {
-        return $this->fetch_from_url('/v1/me/following.json', 'GET', array(
-            'page' => $page,
-            'per_page' => $per_page,
-            'publicity' => $publicity,
+        return $this->fetch('/v1/me/following.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'page' => $page,
+                'per_page' => $per_page,
+                'publicity' => $publicity,
+            ),
         ));
     }
 
@@ -189,9 +223,13 @@ class PixivAPI extends PixivBase
      */
     public function me_favorite_users_follow($user_id, $publicity = 'public')
     {
-        return $this->fetch_from_url('/v1/me/favorite-users.json', 'POST', array(
-            'target_user_id' => $user_id,
-            'publicity' => $publicity,
+        return $this->fetch('/v1/me/favorite-users.json', array(
+            'method' => 'post',
+            'headers' => $this->headers,
+            'body' => array(
+                'target_user_id' => $user_id,
+                'publicity' => $publicity,
+            ),
         ));
     }
 
@@ -204,9 +242,13 @@ class PixivAPI extends PixivBase
      */
     public function me_favorite_users_unfollow($user_ids, $publicity = 'public')
     {
-        return $this->fetch_from_url('/v1/me/favorite-users.json', 'DELETE', array(
-            'delete_ids' => implode(',', $user_ids),
-            'publicity' => $publicity,
+        return $this->fetch('/v1/me/favorite-users.json', array(
+            'method' => 'delete',
+            'headers' => $this->headers,
+            'body' => array(
+                'delete_ids' => implode(',', $user_ids),
+                'publicity' => $publicity,
+            ),
         ));
     }
 
@@ -224,12 +266,16 @@ class PixivAPI extends PixivBase
     public function users_works($author_id, $page = 1, $per_page = 30,
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $include_stats = true, $include_sanity_level = true) {
-        return $this->fetch_from_url('/v1/users/' . $author_id . '/works.json', 'GET', array(
-            'page' => $page,
-            'per_page' => $per_page,
-            'include_stats' => $include_stats,
-            'include_sanity_level' => $include_sanity_level,
-            'image_sizes' => implode(',', $image_sizes),
+        return $this->fetch('/v1/users/' . $author_id . '/works.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'page' => $page,
+                'per_page' => $per_page,
+                'include_stats' => $include_stats,
+                'include_sanity_level' => $include_sanity_level,
+                'image_sizes' => implode(',', $image_sizes),
+            ),
         ));
     }
 
@@ -246,11 +292,15 @@ class PixivAPI extends PixivBase
     public function users_favorite_works($author_id, $page = 1, $per_page = 30,
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $include_sanity_level = true) {
-        return $this->fetch_from_url('/v1/users/' . $author_id . '/favorite_works.json', 'GET', array(
-            'page' => $page,
-            'per_page' => $per_page,
-            'include_sanity_level' => $include_sanity_level,
-            'image_sizes' => implode(',', $image_sizes),
+        return $this->fetch('/v1/users/' . $author_id . '/favorite_works.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'page' => $page,
+                'per_page' => $per_page,
+                'include_sanity_level' => $include_sanity_level,
+                'image_sizes' => implode(',', $image_sizes),
+            ),
         ));
     }
 
@@ -264,15 +314,19 @@ class PixivAPI extends PixivBase
      */
     public function users_feeds($author_id, $show_r18 = true, $max_id = null)
     {
-        $params = array(
+        $body = array(
             'relation' => 'all',
             'type' => 'touch_nottext',
             'show_r18' => $show_r18,
         );
         if (!is_null($max_id)) {
-            $params['max_id'] = $max_id;
+            $body['max_id'] = $max_id;
         }
-        return $this->fetch_from_url('/v1/users/' . $author_id . '/feeds.json', 'GET', $params);
+        return $this->fetch('/v1/users/' . $author_id . '/feeds.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => $body,
+        ));
     }
 
     /**
@@ -285,9 +339,13 @@ class PixivAPI extends PixivBase
      */
     public function users_following($author_id, $page = 1, $per_page = 30)
     {
-        return $this->fetch_from_url('/v1/users/' . $author_id . '/following.json', 'GET', array(
-            'page' => $page,
-            'per_page' => $per_page,
+        return $this->fetch('/v1/users/' . $author_id . '/following.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'page' => $page,
+                'per_page' => $per_page,
+            ),
         ));
     }
 
@@ -315,7 +373,7 @@ class PixivAPI extends PixivBase
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $profile_image_sizes = array('px_170x170', 'px_50x50'),
         $include_stats = true, $include_sanity_level = true) {
-        $params = array(
+        $body = array(
             'mode' => $mode,
             'page' => $page,
             'per_page' => $per_page,
@@ -325,9 +383,13 @@ class PixivAPI extends PixivBase
             'profile_image_sizes' => implode(',', $profile_image_sizes),
         );
         if (!is_null($date)) {
-            $params['date'] = $date;
+            $body['date'] = $date;
         }
-        return $this->fetch_from_url('/v1/ranking/' . $ranking_type . '.json', 'GET', $params);
+        return $this->fetch('/v1/ranking/' . $ranking_type . '.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => $body,
+        ));
     }
 
     /**
@@ -388,18 +450,22 @@ class PixivAPI extends PixivBase
         $types = array('illustration', 'manga', 'ugoira'),
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $include_stats = true, $include_sanity_level = true) {
-        return $this->fetch_from_url('/v1/search/works.json', 'GET', array(
-            'q' => $query,
-            'page' => $page,
-            'per_page' => $per_page,
-            'period' => $period,
-            'order' => $order,
-            'sort' => $sort,
-            'mode' => $mode,
-            'types' => implode(',', $types),
-            'include_stats' => $include_stats,
-            'include_sanity_level' => $include_sanity_level,
-            'image_sizes' => implode(',', $image_sizes),
+        return $this->fetch('/v1/search/works.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'q' => $query,
+                'page' => $page,
+                'per_page' => $per_page,
+                'period' => $period,
+                'order' => $order,
+                'sort' => $sort,
+                'mode' => $mode,
+                'types' => implode(',', $types),
+                'include_stats' => $include_stats,
+                'include_sanity_level' => $include_sanity_level,
+                'image_sizes' => implode(',', $image_sizes),
+            ),
         ));
     }
 
@@ -418,47 +484,18 @@ class PixivAPI extends PixivBase
         $image_sizes = array('px_128x128', 'px_480mw', 'large'),
         $profile_image_sizes = array('px_170x170', 'px_50x50'),
         $include_stats = true, $include_sanity_level = true) {
-        return $this->fetch_from_url('/v1/works.json', 'GET', array(
-            'page' => $page,
-            'per_page' => $per_page,
-            'include_stats' => $include_stats,
-            'include_sanity_level' => $include_sanity_level,
-            'image_sizes' => implode(',', $image_sizes),
-            'profile_image_sizes' => implode(',', $profile_image_sizes),
+        return $this->fetch('/v1/works.json', array(
+            'method' => 'get',
+            'headers' => $this->headers,
+            'body' => array(
+                'page' => $page,
+                'per_page' => $per_page,
+                'include_stats' => $include_stats,
+                'include_sanity_level' => $include_sanity_level,
+                'image_sizes' => implode(',', $image_sizes),
+                'profile_image_sizes' => implode(',', $profile_image_sizes),
+            ),
         ));
-    }
-
-    /**
-     *
-     * @param $uri
-     * @param $method
-     * @param array $params
-     * @return mixed
-     */
-    protected function fetch_from_url($uri, $method, $params = array())
-    {
-        $method = strtolower($method);
-        if (!in_array($method, array('post', 'get', 'put', 'delete'))) {
-            throw new Exception('HTTP Method is not allowed.');
-        }
-        $url = $this->api_prefix . $uri;
-        foreach ($params as $key => $value) {
-            if (is_bool($value)) {
-                $params[$key] = ($value) ? 'true' : 'false';
-            }
-        }
-        $curl = new Curl();
-        $curl->setOpt(CURLOPT_CONNECTTIMEOUT, 10);
-        $curl->setHeader('Host', $this->headers['Host']);
-        $curl->setHeader('Authorization', $this->headers['Authorization']);
-        $curl->setHeader('User-Agent', $this->headers['User-Agent']);
-        $curl->$method($url, $params);
-
-        $result = $curl->response;
-        $curl->close();
-        $array = json_decode(json_encode($result), true);
-
-        return $array;
     }
 
 }

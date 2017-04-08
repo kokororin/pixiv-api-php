@@ -6,11 +6,11 @@
  * @package  pixiv-api-php
  * @author   Kokororin
  * @license  MIT License
- * @version  2.0
+ * @version  2.1
  * @link     https://github.com/kokororin/pixiv-api-php
  */
 
-use \Curl\Curl;
+use Curl\Curl;
 
 abstract class PixivBase
 {
@@ -60,7 +60,7 @@ abstract class PixivBase
     }
 
     /**
-     * 登录
+     * ログイン
      *
      * @param $user
      * @param $pwd
@@ -88,6 +88,8 @@ abstract class PixivBase
         }
         $curl = new Curl();
         $curl->setOpt(CURLOPT_CONNECTTIMEOUT, 10);
+        $curl->setOpt(CURLOPT_SSL_VERIFYHOST, 0);
+        $curl->setOpt(CURLOPT_SSL_VERIFYPEER, 0);
         $curl->setHeader('Authorization', $this->headers['Authorization']);
         $curl->post($this->oauth_url, $request);
         $result = $curl->response;
@@ -101,7 +103,7 @@ abstract class PixivBase
     }
 
     /**
-     * 获取Access Token
+     * Access Token 取得する
      *
      * @return string
      */
@@ -111,7 +113,7 @@ abstract class PixivBase
     }
 
     /**
-     * 设置Access Token
+     * Access Token セット
      *
      * @param $access_token
      */
@@ -122,7 +124,7 @@ abstract class PixivBase
     }
 
     /**
-     * 获取Refresh Token
+     * Refresh Token 取得する
      *
      * @return string
      */
@@ -132,7 +134,7 @@ abstract class PixivBase
     }
 
     /**
-     * 设置Refresh Token
+     * Refresh Token セット
      *
      * @param $refresh_token
      */
@@ -142,7 +144,7 @@ abstract class PixivBase
     }
 
     /**
-     * 获取认证后的信息
+     * AuthorizationResponse 取得する
      *
      * @return string
      */
@@ -152,13 +154,53 @@ abstract class PixivBase
     }
 
     /**
-     * 设置认证后的信息
+     * AuthorizationResponse セット
      *
      * @param $authorization_response
      */
     public function setAuthorizationResponse($authorization_response)
     {
         $this->authorization_response = $authorization_response;
+    }
+
+    /**
+     * ネットワーク要求
+     *
+     * @param $uri
+     * @param $method
+     * @param array $params
+     * @return mixed
+     */
+    protected function fetch($uri, $options = array())
+    {
+        $method = isset($options['method']) ? strtolower($options['method']) : 'get';
+        if (!in_array($method, array('post', 'get', 'put', 'delete'))) {
+            throw new Exception('HTTP Method is not allowed.');
+        }
+        $body = isset($options['body']) ? $options['body'] : array();
+        $headers = isset($options['headers']) ? $options['headers'] : array();
+        $url = $this->api_prefix . $uri;
+        foreach ($body as $key => $value) {
+            if (is_bool($value)) {
+                $body[$key] = ($value) ? 'true' : 'false';
+            }
+        }
+        $curl = new Curl();
+        $curl->setOpt(CURLOPT_CONNECTTIMEOUT, 10);
+        $curl->setOpt(CURLOPT_SSL_VERIFYHOST, 0);
+        $curl->setOpt(CURLOPT_SSL_VERIFYPEER, 0);
+        if (is_array($headers)) {
+            foreach ($headers as $key => $value) {
+                $curl->setHeader($key, $value);
+            }
+        }
+        $curl->$method($url, $body);
+
+        $result = $curl->response;
+        $curl->close();
+        $array = json_decode(json_encode($result), true);
+
+        return $array;
     }
 
 }
