@@ -2,17 +2,13 @@
 
 class PixivAPITest extends \PHPUnit_Framework_TestCase
 {
-
-    protected $username = '';
-    protected $password = '';
-
     protected $loginedInstance = null;
 
     public function getLoginedInstance()
     {
         if (!$this->loginedInstance instanceof PixivAPI) {
             $api = new PixivAPI();
-            $api->login($this->username, $this->password);
+            $api->login(getenv('USERNAME'), getenv('PASSWORD'));
             $this->loginedInstance = $api;
         }
         return $this->loginedInstance;

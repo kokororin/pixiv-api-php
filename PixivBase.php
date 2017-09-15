@@ -38,6 +38,11 @@ abstract class PixivBase
     protected $oauth_client_secret = 'HP3RmkgAmEGro0gn1x9ioawQE8WMfvLXDz3ZqxpK';
 
     /**
+     * @var string
+     */
+    protected $oauth_device_token = 'af014441a5f1a3340952922adeba1c36';
+
+    /**
      * @var null
      */
     protected $access_token = null;
@@ -71,6 +76,7 @@ abstract class PixivBase
         $request = array(
             'client_id' => $this->oauth_client_id,
             'client_secret' => $this->oauth_client_secret,
+            'device_token' => $this->oauth_device_token,
         );
         if ($user != null && $pwd != null) {
             $request = array_merge($request, array(

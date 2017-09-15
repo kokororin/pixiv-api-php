@@ -33,7 +33,7 @@ class PixivAppAPI extends PixivBase
         'User-Agent' => 'PixivIOSApp/6.7.1 (iOS 10.3.1; iPhone8,1)',
         'App-OS' => 'ios',
         'App-OS-Version' => '10.3.1',
-        'App-Version' => '6.7.1',
+        'App-Version' => '6.9.0',
     );
 
     /**
@@ -46,7 +46,7 @@ class PixivAppAPI extends PixivBase
     {
         return $this->fetch('/v1/user/detail', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => array(
                 'user_id' => $user_id,
                 'filter' => $this->api_filter,
@@ -66,7 +66,7 @@ class PixivAppAPI extends PixivBase
     {
         return $this->fetch('/v1/user/illusts', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => array(
                 'user_id' => $user_id,
                 'type' => $type,
@@ -108,7 +108,7 @@ class PixivAppAPI extends PixivBase
         }
         return $this->fetch('/v1/search/illust', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => $body,
         ));
     }
@@ -124,7 +124,7 @@ class PixivAppAPI extends PixivBase
     {
         return $this->fetch('/v1/user/bookmarks/illust', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => array(
                 'user_id' => $user_id,
                 'restrict' => $restrict,
@@ -143,7 +143,7 @@ class PixivAppAPI extends PixivBase
     {
         return $this->fetch('/v1/illust/detail', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => array(
                 'illust_id' => $illust_id,
             ),
@@ -162,7 +162,7 @@ class PixivAppAPI extends PixivBase
     {
         return $this->fetch('/v1/illust/comments', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => array(
                 'illust_id' => $illust_id,
                 'offset' => ($page - 1) * 30,
@@ -189,7 +189,7 @@ class PixivAppAPI extends PixivBase
         }
         return $this->fetch('/v2/illust/related', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => $body,
         ));
     }
@@ -233,7 +233,7 @@ class PixivAppAPI extends PixivBase
         }
         return $this->fetch('/v1/illust/recommended-nologin', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => $body,
         ));
     }
@@ -266,7 +266,7 @@ class PixivAppAPI extends PixivBase
         }
         return $this->fetch('/v1/illust/ranking', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => $body,
         ));
     }
@@ -280,7 +280,7 @@ class PixivAppAPI extends PixivBase
     {
         return $this->fetch('/v1/trending-tags/illust', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => array(
                 'filter' => $this->api_filter,
             ),
@@ -298,7 +298,7 @@ class PixivAppAPI extends PixivBase
     {
         return $this->fetch('/v1/user/following', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => array(
                 'user_id' => $user_id,
                 'restrict' => $restrict,
@@ -317,7 +317,7 @@ class PixivAppAPI extends PixivBase
     {
         return $this->fetch('/v1/user/follower', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => array(
                 'user_id' => $user_id,
                 'filter' => $this->api_filter,
@@ -336,7 +336,7 @@ class PixivAppAPI extends PixivBase
     {
         return $this->fetch('/v1/user/mypixiv', array(
             'method' => 'get',
-            'headers' => $this->noneAuthHeaders,
+            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
             'body' => array(
                 'user_id' => $user_id,
                 'offset' => ($page - 1) * 30,

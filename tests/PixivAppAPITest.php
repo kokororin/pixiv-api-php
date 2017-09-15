@@ -2,16 +2,28 @@
 
 class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 {
+    protected $loginedInstance = null;
+
+    public function getLoginedInstance()
+    {
+        if (!$this->loginedInstance instanceof PixivAppAPI) {
+            $api = new PixivAppAPI();
+            $api->login(getenv('PIXIV_USERNAME'), getenv('PIXIV_PASSWORD'));
+            $this->loginedInstance = $api;
+        }
+        return $this->loginedInstance;
+    }
+
     public function testInitialize()
     {
-        $api = new PixivAppAPI;
+        $api = $this->getLoginedInstance();
 
         $this->assertInstanceOf('PixivAppAPI', $api);
     }
 
     public function testUserDetail()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->user_detail(19983902);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('user', $result);
@@ -19,7 +31,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testUserIllusts()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->user_illusts(19983902, 1);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('illusts', $result);
@@ -27,7 +39,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testSearchIllust()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->search_illust('kotori', 1);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('illusts', $result);
@@ -35,7 +47,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testUserBookmarksIllust()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->user_bookmarks_illust(19983902);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('illusts', $result);
@@ -43,7 +55,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testIllustDetail()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->illust_detail(47527196);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('illust', $result);
@@ -51,7 +63,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testIllustComments()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->illust_comments(47527196);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('comments', $result);
@@ -59,7 +71,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testIllustRelated()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->illust_related(47527196);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('illusts', $result);
@@ -67,7 +79,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testIllustRecommended()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->illust_recommended();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('illusts', $result);
@@ -75,7 +87,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testIllustRanking()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->illust_ranking('day', 1);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('illusts', $result);
@@ -83,7 +95,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testTrendingTagsIllust()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->trending_tags_illust();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('trend_tags', $result);
@@ -91,7 +103,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testUserFollowing()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->user_following(19983902);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('user_previews', $result);
@@ -99,7 +111,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testUserFollower()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->user_follower(19983902);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('user_previews', $result);
@@ -107,7 +119,7 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
 
     public function testUserMypixiv()
     {
-        $api = new PixivAppAPI();
+        $api = $this->getLoginedInstance();
         $result = $api->user_mypixiv(19983902);
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('user_previews', $result);

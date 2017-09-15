@@ -8,7 +8,7 @@ _Pixiv API for PHP (with Auth supported)_
 ### Installation
 
 ~~~bash
-composer require kokororin/pixiv-api-php
+composer require kokororin/pixiv-api-php:dev-master
 ~~~
 
 ### Example:
@@ -25,15 +25,15 @@ $api->method();
 To execute the test suite, you'll need phpunit.
 
 ```bash
-$ composer test
+$ PIXIV_USERNAME=XXX PIXIV_PASSWORD=XXX composer test
 ```
 
 ## API
 
 ### PixivAppAPI
-**Needn't authentication.**  
+**ALL METHODS need authentication.**  
 See [PixivAppAPI.php](https://github.com/kokororin/pixiv-api-php/blob/master/PixivAppAPI.php) or [PixivAppAPITest.php](https://github.com/kokororin/pixiv-api-php/blob/master/tests/PixivAppAPITest.php) for detail usage.
 
 ### PixivAPI (**deprecated**)
-**Some method need authentication.**  
+**Some methods need authentication.**  
 See [PixivAPI.php](https://github.com/kokororin/pixiv-api-php/blob/master/PixivAPI.php) or [PixivAPITest.php](https://github.com/kokororin/pixiv-api-php/blob/master/tests/PixivAPITest.php) for detail usage.
