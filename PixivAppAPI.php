@@ -195,50 +195,6 @@ class PixivAppAPI extends PixivBase
     }
 
     /**
-     * お勧めのイラスト一覧
-     *
-     * @param  string  $content_type
-     * @param  integer $page
-     * @param  boolean $include_ranking_label
-     * @param  string  $max_bookmark_id_for_recommend
-     * @param  string  $min_bookmark_id_for_recent_illust
-     * @param  boolean  $include_ranking_illusts
-     * @param  array  $bookmark_illust_ids
-     * @return array
-     */
-    public function illust_recommended($content_type = 'illust',
-        $page = 1,
-        $include_ranking_label = true,
-        $max_bookmark_id_for_recommend = null,
-        $min_bookmark_id_for_recent_illust = null,
-        $include_ranking_illusts = null,
-        $bookmark_illust_ids = null) {
-        $body = array(
-            'content_type' => $content_type,
-            'include_ranking_label' => $include_ranking_label,
-            'offset' => ($page - 1) * 30,
-            'filter' => $this->api_filter,
-        );
-        if ($max_bookmark_id_for_recommend != null) {
-            $body['max_bookmark_id_for_recommend'] = $max_bookmark_id_for_recommend;
-        }
-        if ($min_bookmark_id_for_recent_illust != null) {
-            $body['min_bookmark_id_for_recent_illust'] = $min_bookmark_id_for_recent_illust;
-        }
-        if ($include_ranking_illusts != null) {
-            $body['include_ranking_illusts'] = $include_ranking_illusts;
-        }
-        if (is_array($bookmark_illust_ids)) {
-            $body['bookmark_illust_ids'] = $bookmark_illust_ids;
-        }
-        return $this->fetch('/v1/illust/recommended-nologin', array(
-            'method' => 'get',
-            'headers' => array_merge($this->noneAuthHeaders, $this->headers),
-            'body' => $body,
-        ));
-    }
-
-    /**
      * ランキングイラスト一覧
      *
      * @param  string  $mode

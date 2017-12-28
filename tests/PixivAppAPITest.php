@@ -77,14 +77,6 @@ class PixivAppAPITest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('illusts', $result);
     }
 
-    public function testIllustRecommended()
-    {
-        $api = $this->getLoginedInstance();
-        $result = $api->illust_recommended();
-        $this->assertTrue(is_array($result));
-        $this->assertArrayHasKey('illusts', $result);
-    }
-
     public function testIllustRanking()
     {
         $api = $this->getLoginedInstance();
