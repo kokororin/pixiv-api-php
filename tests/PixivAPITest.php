@@ -8,7 +8,7 @@ class PixivAPITest extends \PHPUnit_Framework_TestCase
     {
         if (!$this->loginedInstance instanceof PixivAPI) {
             $api = new PixivAPI();
-            $api->login(getenv('USERNAME'), getenv('PASSWORD'));
+            $api->login(getenv('PIXIV_USERNAME'), getenv('PIXIV_USERNAME'));
             $this->loginedInstance = $api;
         }
         return $this->loginedInstance;

@@ -30,17 +30,17 @@ abstract class PixivBase
     /**
      * @var string
      */
-    protected $oauth_client_id = 'bYGKuGVw91e0NMfPGp44euvGt59s';
+    protected $oauth_client_id = 'MOBrBDS8blbauoSck0ZfDbtuzpyT';
 
     /**
      * @var string
      */
-    protected $oauth_client_secret = 'HP3RmkgAmEGro0gn1x9ioawQE8WMfvLXDz3ZqxpK';
+    protected $oauth_client_secret = 'lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj';
 
     /**
      * @var string
      */
-    protected $oauth_device_token = 'af014441a5f1a3340952922adeba1c36';
+    protected $hash_secret = '28c1fdd170a5204386cb1313c7077b34f83e4aaf4aa829ce78c231e05b0bae2c';
 
     /**
      * @var null
@@ -73,10 +73,11 @@ abstract class PixivBase
      */
     public function login($user = null, $pwd = null, $refresh_token = null)
     {
+        $local_time = date('Y-m-d') . 'T' . date('H:i:s+00:00');
         $request = array(
             'client_id' => $this->oauth_client_id,
             'client_secret' => $this->oauth_client_secret,
-            'device_token' => $this->oauth_device_token,
+            'get_secure_url' => 1,
         );
         if ($user != null && $pwd != null) {
             $request = array_merge($request, array(
@@ -96,7 +97,9 @@ abstract class PixivBase
         $curl->setOpt(CURLOPT_CONNECTTIMEOUT, 10);
         $curl->setOpt(CURLOPT_SSL_VERIFYHOST, 0);
         $curl->setOpt(CURLOPT_SSL_VERIFYPEER, 0);
-        $curl->setHeader('Authorization', $this->headers['Authorization']);
+        $curl->setHeader('User-Agent', 'PixivAndroidApp/5.0.64 (Android 6.0)');
+        $curl->setHeader('X-Client-Time', $local_time);
+        $curl->setHeader('X-Client-Hash', md5($local_time . $this->hash_secret));
         $curl->post($this->oauth_url, $request);
         $result = $curl->response;
         $curl->close();
