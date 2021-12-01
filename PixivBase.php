@@ -88,7 +88,7 @@ abstract class PixivBase
         } elseif ($refresh_token != null || $this->refresh_token != null) {
             $request = array_merge($request, array(
                 'grant_type' => 'refresh_token',
-                'refresh_token' => $refresh_token || $this->refresh_token,
+                'refresh_token' => $refresh_token ?: $this->refresh_token,
             ));
         } else {
             throw new Exception('login params error.');
@@ -97,7 +97,7 @@ abstract class PixivBase
         $curl->setOpt(CURLOPT_CONNECTTIMEOUT, 10);
         $curl->setOpt(CURLOPT_SSL_VERIFYHOST, 0);
         $curl->setOpt(CURLOPT_SSL_VERIFYPEER, 0);
-        $curl->setHeader('User-Agent', 'PixivAndroidApp/5.0.64 (Android 6.0)');
+        $curl->setHeader('User-Agent', 'PixivAndroidApp/5.0.234  (Android 9.0; Pixel 3)');
         $curl->setHeader('X-Client-Time', $local_time);
         $curl->setHeader('X-Client-Hash', md5($local_time . $this->hash_secret));
         $curl->post($this->oauth_url, $request);
@@ -149,7 +149,7 @@ abstract class PixivBase
      */
     public function setRefreshToken($refresh_token)
     {
-        $this->refresh_token = $this->refresh_token;
+        $this->refresh_token = $refresh_token;
     }
 
     /**
